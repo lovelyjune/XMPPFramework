@@ -866,11 +866,13 @@ enum XMPPRosterFlags
 		{
 			// Presence subscription request from someone who's already in our roster.
 			// Automatically approve.
-			// 
+			//
 			// <presence to="bareJID" type="subscribed"/>
-			
-			XMPPPresence *response = [XMPPPresence presenceWithType:@"subscribed" to:userJID];
-			[xmppStream sendElement:response];
+            //原来是下面这句话，sdk收到subscribe之后，判断发送的人是自己的好友，自动发送subscribed回去。由于我们自己的业务关系，不再主动发，又代理 发上业务层自己手动判断
+            //            XMPPPresence *response = [XMPPPresence presenceWithType:@"subscribed" to:userJID];
+            //            [xmppStream sendElement:response];
+            //自己操作
+            [multicastDelegate xmppRoster:self didReceivePresenceSubscriptionRequest:presence];
 		}
 		else
 		{
